@@ -1,0 +1,30 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE struts PUBLIC
+	"-//Apache Software Foundation//DTD Struts Configuration 2.3//EN"
+	"http://struts.apache.org/dtds/struts-2.3.dtd">
+	
+<struts>
+	<!-- 先配置包结构和action -->
+    <package name="sshbase" extends="struts-default" namespace="/">
+    <!-- 这是最初的由Struts2框架自己来管理我们的action 。-->
+	<!-- <action name="customer_*" class = "com.qq986945193.sshbase.web.action.CustomerAction" method="{1}"/>   -->
+	<!-- 这里配置客户的action，如果action由spring框架来管理，则class标签上只需写在applicationContext中配置的action的ID值即可 -->  
+    <action name="customer_*" class = "customerAction" method="{1}">
+    
+    </action>
+    
+    </package>
+</struts>
+
+
+
+
+
+
+
+
+
+
+
+
+

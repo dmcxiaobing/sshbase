@@ -1,0 +1,99 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<beans xmlns="http://www.springframework.org/schema/beans"
+	xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+	xmlns:context="http://www.springframework.org/schema/context"
+	xmlns:aop="http://www.springframework.org/schema/aop"
+	xmlns:tx="http://www.springframework.org/schema/tx"
+	xsi:schemaLocation="http://www.springframework.org/schema/beans 
+	http://www.springframework.org/schema/beans/spring-beans.xsd
+	http://www.springframework.org/schema/context
+	http://www.springframework.org/schema/context/spring-context.xsd
+	http://www.springframework.org/schema/aop
+	http://www.springframework.org/schema/aop/spring-aop.xsd
+	http://www.springframework.org/schema/tx 
+	http://www.springframework.org/schema/tx/spring-tx.xsd">
+	<!-- 	<session-factory>
+		必须配置
+		<property name="driverClass" value="com.mysql.jdbc.Driver"/>
+		<property name="jdbcUrl" value="jdbc:mysql:///sshtools"/>
+		<property name="user" value="root"/>
+		<property name="password" value="1234"/>
+		<property name="hibernate.dialect">org.hibernate.dialect.MySQLDialect</property>
+		
+		可选配置
+		<property name="hibernate.show_sql">true</property>
+		<property name="hibernate.format_sql">true</property>
+		<property name="hibernate.hbm2ddl.auto">update</property>
+		
+		配置C3P0的连接池
+		<property name="connection.provider_class">org.hibernate.connection.C3P0ConnectionProvider</property>
+		
+		映射配置文件
+		
+		
+	</session-factory>
+	 -->
+	<!-- 先配置C3P0的连接池 -->
+	<bean id="dataSource" class="com.mchange.v2.c3p0.ComboPooledDataSource">
+		<property name="driverClass" value="com.mysql.jdbc.Driver"/>
+		<property name="jdbcUrl" value="jdbc:mysql:///sshtools"/>
+		<property name="user" value="root"/>
+		<property name="password" value="1234"/>
+	</bean>
+	<!-- LocalSessionFactoryBean加载配置文件 -->
+	<bean id="sessionFactory" class="org.springframework.orm.hibernate5.LocalSessionFactoryBean">
+		<!-- 先加载连接池 -->
+		<property name="dataSource" ref="dataSource"/>
+		<!-- 加载方言，可以根据需要自由选择 -->
+		<property name="hibernateProperties">
+			<props>
+				<prop key="hibernate.dialect">org.hibernate.dialect.MySQLDialect</prop>
+				<prop key="hibernate.show_sql">true</prop>
+				<prop key="hibernate.format_sql">true</prop>
+				<prop key="hibernate.hbm2ddl.auto">update</prop>
+			</props>
+		</property>
+		<!-- 引入配置文件 -->
+		<property name="mappingResources">
+			<list>
+				<value>com/qq986945193/sshbase/domain/Customer.hbm.xml</value>
+			</list>
+		</property>
+	</bean>
+	
+	<!-- 配置我们的平台事务管理器 -->
+	<bean id="transactionManager" class ="org.springframework.orm.hibernate5.HibernateTransactionManager">
+		<property name="sessionFactory" ref="sessionFactory"/>
+	</bean>
+	<!-- 开启事务的注解 -->
+	<tx:annotation-driven transaction-manager="transactionManager"/>
+	
+	<!--配置客户模块  -->
+	<!-- 注意：以后配置action，必须是多例的 -->
+	<!-- action中依赖service，所以这里配置进去service -->
+	<bean id="customerAction" class="com.qq986945193.sshbase.web.action.CustomerAction" scope="prototype">
+		<property name="customerService" ref="customerService"/>
+	</bean>
+	
+	<!-- 配置service ，依赖dao，所以映射进去dao-->
+	<bean id="customerService" class="com.qq986945193.sshbase.service.impl.CustomerServiceImpl">
+		<property name="customerDao" ref="customerDao"/>
+	</bean>
+	
+	<!-- 配置dao,以后Dao都需要继承HibernateDaoSupport,注入sessionFactory -->
+	<bean id="customerDao" class="com.qq986945193.sshbase.dao.impl.CustomerDaoImpl">
+		<property name="sessionFactory" ref="sessionFactory"/>
+	</bean>
+</beans>
+
+
+
+
+
+
+
+
+
+
+
+
