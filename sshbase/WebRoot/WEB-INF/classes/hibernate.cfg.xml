@@ -1,0 +1,29 @@
+<!-- <?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE hibernate-configuration PUBLIC
+	"-//Hibernate/Hibernate Configuration DTD 3.0//EN"
+	"http://www.hibernate.org/dtd/hibernate-configuration-3.0.dtd">
+	由于ssh整合了，所以hibernate全部交给spring管理了
+<hibernate-configuration>
+	
+	<session-factory>
+		必须配置
+		<property name="hibernate.connection.driver_class">com.mysql.jdbc.Driver</property>
+		<property name="hibernate.connection.url">jdbc:mysql:///sshtools</property>
+		<property name="hibernate.connection.username">root</property>
+		<property name="hibernate.connection.password">1234</property>
+		<property name="hibernate.dialect">org.hibernate.dialect.MySQLDialect</property>
+		
+		可选配置
+		<property name="hibernate.show_sql">true</property>
+		<property name="hibernate.format_sql">true</property>
+		<property name="hibernate.hbm2ddl.auto">update</property>
+		
+		配置C3P0的连接池
+		<property name="connection.provider_class">org.hibernate.connection.C3P0ConnectionProvider</property>
+		
+		映射配置文件
+		
+		
+	</session-factory>
+	
+</hibernate-configuration>	 -->
