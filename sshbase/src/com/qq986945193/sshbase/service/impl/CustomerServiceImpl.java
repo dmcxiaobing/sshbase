@@ -2,10 +2,12 @@ package com.qq986945193.sshbase.service.impl;
 
 import java.util.List;
 
+import org.hibernate.criterion.DetachedCriteria;
 import org.springframework.transaction.annotation.Transactional;
 
 import com.qq986945193.sshbase.dao.CustomerDao;
 import com.qq986945193.sshbase.domain.Customer;
+import com.qq986945193.sshbase.domain.PageBean;
 import com.qq986945193.sshbase.service.CustomerService;
 
 /**
@@ -46,6 +48,13 @@ public class CustomerServiceImpl implements CustomerService{
 
 	public Customer loadById(long id) {
 		return customerDao.loadById(id);
+	}
+	/**
+	 * 分页查询用户列表
+	 */
+	@Override
+	public PageBean<Customer> findByPage(Integer pageCode, Integer pageSize, DetachedCriteria criteria) {
+		return customerDao.findByPage(pageCode,pageSize,criteria);
 	}
 
 }

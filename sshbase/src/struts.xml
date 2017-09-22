@@ -4,15 +4,39 @@
 	"http://struts.apache.org/dtds/struts-2.3.dtd">
 	
 <struts>
+	<!-- 设置上传文件的大小，默认是2M，struts.multipart.maxSize=20971520 -->
+	<constant name="struts.multipart.maxSize" value="20971520"/>
+
 	<!-- 先配置包结构和action -->
     <package name="sshbase" extends="struts-default" namespace="/">
+      <!-- 这个是简单的demo小实例配置。。 -->
+    <global-results>
+    <!--全局配置的结果页面  -->
+    	<result name="login" type="redirect">/login.jsp</result>
+    </global-results>
+  
+  
+  
+  
     <!-- 这是最初的由Struts2框架自己来管理我们的action 。-->
 	<!-- <action name="customer_*" class = "com.qq986945193.sshbase.web.action.CustomerAction" method="{1}"/>   -->
 	<!-- 这里配置客户的action，如果action由spring框架来管理，则class标签上只需写在applicationContext中配置的action的ID值即可 -->  
     <action name="customer_*" class = "customerAction" method="{1}">
-    
+    	<result name="page" >/jsp/customer/list.jsp</result>
+    	<result name="initAddUI" >/jsp/customer/add.jsp</result>
+    	<result name="save" type="redirectAction">customer_findByPage.action</result>
+    	<result name="input" >/jsp/error.jsp</result>
+    	<result name="delete" type="redirectAction">customer_findByPage.action</result>
     </action>
     
+
+    
+     <!-- 这里配置用户的模块 -->
+     <action name="user_*" class="userAction" method="{1}">
+     	<result name="loginOk" type="redirect">/index.jsp</result>
+     </action>
+    <!-- 字典模块 -->
+    <action name="dict_*" class="dictAction" method="{1}"></action>
     </package>
 </struts>
 

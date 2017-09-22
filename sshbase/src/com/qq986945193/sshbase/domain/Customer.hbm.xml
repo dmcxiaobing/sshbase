@@ -13,13 +13,15 @@
 		<property name="cust_name" column="cust_name"/>
 		<property name="cust_user_id" column="cust_user_id"/>
 		<property name="cust_create_id" column="cust_create_id"/>
-		<property name="cust_source" column="cust_source"/>
-		<property name="cust_industry" column="cust_industry"/>
-		<property name="cust_level" column="cust_level"/>
 		<property name="cust_linkman" column="cust_linkman"/>
 		<property name="cust_phone" column="cust_phone"/>
 		<property name="cust_mobile" column="cust_mobile"/>
-		
+		<!-- 上传文件保存的路径 -->
+		<property name="filepath" column="filepath"></property>
+		<!-- 客户和字典表，多对一。配置多方 -->
+		<many-to-one name="source" class="com.qq986945193.sshbase.domain.Dict" column="cust_source"></many-to-one>
+		<many-to-one name="industry" class="com.qq986945193.sshbase.domain.Dict" column="cust_industry"></many-to-one>
+		<many-to-one name="level" class="com.qq986945193.sshbase.domain.Dict" column="cust_level"></many-to-one>
 	</class>
 	
 </hibernate-mapping>    

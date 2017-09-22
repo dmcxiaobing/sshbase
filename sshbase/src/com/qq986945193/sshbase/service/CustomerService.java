@@ -2,7 +2,10 @@ package com.qq986945193.sshbase.service;
 
 import java.util.List;
 
+import org.hibernate.criterion.DetachedCriteria;
+
 import com.qq986945193.sshbase.domain.Customer;
+import com.qq986945193.sshbase.domain.PageBean;
 
 
 public interface CustomerService {
@@ -17,5 +20,7 @@ public void save(Customer customer);
 	public List<Customer> findAllByQBC();
 
 	public Customer loadById(long id);
+
+	public PageBean<Customer> findByPage(Integer pageCode, Integer pageSize, DetachedCriteria criteria);
 	
 }

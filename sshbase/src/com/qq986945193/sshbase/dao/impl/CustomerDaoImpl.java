@@ -2,42 +2,52 @@ package com.qq986945193.sshbase.dao.impl;
 
 import java.util.List;
 
+import org.hibernate.criterion.DetachedCriteria;
+import org.hibernate.criterion.Projections;
 import org.springframework.orm.hibernate5.support.HibernateDaoSupport;
 
 import com.qq986945193.sshbase.dao.CustomerDao;
 import com.qq986945193.sshbase.domain.Customer;
+import com.qq986945193.sshbase.domain.PageBean;
+import com.sun.org.apache.bcel.internal.generic.I2F;
+
 /**
  * 持久层
+ * 
  * @Author ：程序员小冰
  * @新浪微博 ：http://weibo.com/mcxiaobing
  * @GitHub: https://github.com/QQ986945193
  */
-public class CustomerDaoImpl extends HibernateDaoSupport implements CustomerDao{
+public class CustomerDaoImpl extends HibernateDaoSupport implements CustomerDao {
 	/**
 	 * 保存客户
 	 */
 	public void save(Customer customer) {
-		//把数据保存到数据库中
+		// 把数据保存到数据库中
 		this.getHibernateTemplate().save(customer);
 	}
+
 	/**
 	 * 修改客户
 	 */
 	public void update(Customer customer) {
 		this.getHibernateTemplate().update(customer);
 	}
+
 	/**
 	 * 通过主键查询
 	 */
 	public Customer getById(Long id) {
 		return this.getHibernateTemplate().get(Customer.class, id);
 	}
+
 	/**
 	 * 查询所有
 	 */
 	public List<Customer> findAll() {
 		return (List<Customer>) this.getHibernateTemplate().find("from Customer");
 	}
+
 	/**
 	 * 查询所有的数据，使用QBC的查询
 	 */
@@ -45,11 +55,37 @@ public class CustomerDaoImpl extends HibernateDaoSupport implements CustomerDao{
 		// TODO Auto-generated method stub
 		return null;
 	}
+
 	/**
 	 * 演示延迟加载
 	 */
 	public Customer loadById(long id) {
 		return this.getHibernateTemplate().load(Customer.class, id);
+	}
+
+	/**
+	 * 分页查询
+	 */
+	@Override
+	public PageBean<Customer> findByPage(Integer pageCode, Integer pageSize, DetachedCriteria criteria) {
+		PageBean<Customer> pageBean = new PageBean<Customer>();
+		pageBean.setPageCode(pageCode);
+		pageBean.setPageSize(pageCode);
+		// 先查询总记录数。select count(*)
+		criteria.setProjection(Projections.rowCount());
+		List<Number> list = (List<Number>) this.getHibernateTemplate().findByCriteria(criteria);
+		if (list != null && list.size() > 0) {
+			int totalCount = list.get(0).intValue();
+			// 总的记录数
+			pageBean.setTotalCount(totalCount);
+		}
+		criteria.setProjection(null);// 清空
+		// 提供分页查询数据
+		List<Customer> customers = (List<Customer>) this.getHibernateTemplate().findByCriteria(criteria,
+				(pageCode - 1) * pageSize, pageSize);
+		// 分页查询数据，每页显示的数据，使用limit
+		pageBean.setBeanList(customers);
+		return pageBean;
 	}
 
 }

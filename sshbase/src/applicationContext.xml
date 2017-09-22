@@ -37,7 +37,7 @@
 	<!-- 先配置C3P0的连接池 -->
 	<bean id="dataSource" class="com.mchange.v2.c3p0.ComboPooledDataSource">
 		<property name="driverClass" value="com.mysql.jdbc.Driver"/>
-		<property name="jdbcUrl" value="jdbc:mysql:///sshtools"/>
+		<property name="jdbcUrl" value="jdbc:mysql:///sshbase"/>
 		<property name="user" value="root"/>
 		<property name="password" value="1234"/>
 	</bean>
@@ -58,6 +58,8 @@
 		<property name="mappingResources">
 			<list>
 				<value>com/qq986945193/sshbase/domain/Customer.hbm.xml</value>
+				<value>com/qq986945193/sshbase/domain/User.hbm.xml</value>
+				<value>com/qq986945193/sshbase/domain/Dict.hbm.xml</value>
 			</list>
 		</property>
 	</bean>
@@ -75,16 +77,38 @@
 	<bean id="customerAction" class="com.qq986945193.sshbase.web.action.CustomerAction" scope="prototype">
 		<property name="customerService" ref="customerService"/>
 	</bean>
+	<bean id="userAction" class="com.qq986945193.sshbase.web.action.UserAction" scope="prototype">
+		<property name="userService" ref="userService"></property>
+	</bean>
+	<bean id="dictAction" class="com.qq986945193.sshbase.web.action.DictAction" scope="prototype">
+		<property name="dictService" ref="dictService"></property>
+	</bean>
 	
 	<!-- 配置service ，依赖dao，所以映射进去dao-->
 	<bean id="customerService" class="com.qq986945193.sshbase.service.impl.CustomerServiceImpl">
 		<property name="customerDao" ref="customerDao"/>
 	</bean>
+	<bean id="userService" class="com.qq986945193.sshbase.service.impl.UserServiceImpl">
+		<property name="userDao" ref="userDao"/>
+	</bean>
+	<bean id="dictService" class="com.qq986945193.sshbase.service.impl.DictServiceImpl">
+		<property name="dictDao" ref="dictDao"/>
+	</bean>
+	
+	
 	
 	<!-- 配置dao,以后Dao都需要继承HibernateDaoSupport,注入sessionFactory -->
 	<bean id="customerDao" class="com.qq986945193.sshbase.dao.impl.CustomerDaoImpl">
 		<property name="sessionFactory" ref="sessionFactory"/>
 	</bean>
+	<bean id="userDao" class="com.qq986945193.sshbase.dao.impl.UserDaoImpl">
+		<property name="sessionFactory" ref="sessionFactory"/>
+	</bean>
+	
+	<bean id="dictDao" class="com.qq986945193.sshbase.dao.impl.DictDaoImpl">
+		<property name="sessionFactory" ref="sessionFactory"/>
+	</bean>
+	
 </beans>
 
 
