@@ -27,9 +27,15 @@
     	<result name="save" type="redirectAction">customer_findByPage.action</result>
     	<result name="input" >/jsp/error.jsp</result>
     	<result name="delete" type="redirectAction">customer_findByPage.action</result>
+  		<!-- 引入默认的拦截器 -->
+  		<interceptor-ref name="defaultStack">
+  			<!-- 决定上传文件的类型 -->
+  			<param name="fileUpload.allowedExtensions">.jpg,.txt</param>
+  		</interceptor-ref>
+  
     </action>
-    
-
+    	
+	
     
      <!-- 这里配置用户的模块 -->
      <action name="user_*" class="userAction" method="{1}">

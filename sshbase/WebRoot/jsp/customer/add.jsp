@@ -15,7 +15,7 @@
 <script type="text/javascript">
 	//页面的加载
 	$(function(){
-		// 发送ajax的请求
+		// 发送ajax的请求 ,获取到级别
 		var url = "${ pageContext.request.contextPath }/dict_findByCode.action";
 		var param = {"dict_type_code":"006"};
 		$.post(url,param,function(data){

@@ -45,7 +45,9 @@ public class CustomerServiceImpl implements CustomerService{
 	public List<Customer> findAllByQBC() {
 		return customerDao.findAllByQBC();
 	}
-
+	/**
+	 * 通过id查找客户
+	 */
 	public Customer loadById(long id) {
 		return customerDao.loadById(id);
 	}

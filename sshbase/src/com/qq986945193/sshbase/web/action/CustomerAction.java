@@ -1,5 +1,9 @@
 package com.qq986945193.sshbase.web.action;
 
+import java.io.File;
+import java.io.IOException;
+
+import org.aspectj.util.FileUtil;
 import org.hibernate.criterion.DetachedCriteria;
 import org.hibernate.criterion.Restrictions;
 
@@ -11,6 +15,7 @@ import com.qq986945193.sshbase.domain.Customer;
 import com.qq986945193.sshbase.domain.Dict;
 import com.qq986945193.sshbase.domain.PageBean;
 import com.qq986945193.sshbase.service.CustomerService;
+import com.qq986945193.sshbase.utils.UploadUtils;
 
 /**
  * 客户的控制层
@@ -75,6 +80,52 @@ public class CustomerAction extends ActionSupport implements ModelDriven<Custome
 	
 	
 	}
+	/**
+	 * 文件的上传，需要在CustomerAction类中定义成员的属性，命名是有规则的！！
+	 * private File upload;		// 表示要上传的文件
+	 * private String uploadFileName;	表示是上传文件的名称（没有中文乱码）
+	 * private String uploadContentType;	表示上传文件的MIME类型
+	 * 提供set方法，拦截器就注入值了
+	 */
+	private File upload;//要上传的文件
+	private String uploadFileName;//文件的名称
+	private String uploadContentType;//文件的MIME类型
+		
+	public void setUpload(File upload) {
+		this.upload = upload;
+	}
+
+	public void setUploadFileName(String uploadFileName) {
+		this.uploadFileName = uploadFileName;
+	}
+
+	public void setUploadContentType(String uploadContentType) {
+		this.uploadContentType = uploadContentType;
+	}
+
+	/**
+	 * 保存客户的方法
+	 */
+	public String save() throws Exception{
+		//做文件的上传。如果uploadFileName不为空，则说明已经选择了上传的文件
+		if (uploadFileName!=null) {
+			//可以打印出文件类型
+			System.out.println("文件类型:"+uploadContentType);
+			//把文件的名称处理一下
+			String uuidname = UploadUtils.getUUIDName(uploadFileName);
+			//把文件上传到D盘
+			String path = "D:\\KaiFaGongJu\\";
+			//创建file对象
+			File file = new File(path+uuidname);
+			FileUtil.copyFile(upload, file);//直接利用ioutils拷贝过去
+			//把上传的文件的路径，保存到数据库
+			customer.setFilepath(path+uuidname);//当然。这里直接用了绝对路径
+		
+		}
+		customerService.save(customer);
+		return "save";
+	}
+	
 	
 	/**
 	 * 初始化到添加的页面
